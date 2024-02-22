@@ -1,0 +1,1105 @@
+1.Java is platform independent because it is different from other languages like C, C++, etc.
+   which are compiled into platform specific machines while Java is a write once, run anywhere language.
+2.The Java platform differs from most other platforms in the sense that it is a software-based platform that runs on top of other hardware-based platforms. It has two components:
+	1.4Runtime Environment
+	2.API(Application Programming Interface)
+3.Java is best known for its security. With Java, we can develop virus-free systems. Java is secured because:
+	1.No explicit pointer
+	2.Java Programs run inside a virtual machine sandbox
+note: Java uses RTE of its own. It runs program in JVM in OS whereas c++ compiles woth os compiler.
+	3.Classloader: Classloader in Java is a part of the Java Runtime Environment (JRE) which is used to load Java classes into the Java Virtual Machine dynamically. 
+		       It adds security by separating the package for the classes of the local file system from those that are imported from network sources.
+	4.Bytecode Verifier: It checks the code fragments for illegal code that can violate access rights to objects.
+	5.Security Manager: It determines what resources a class can access such as reading and writing to the local disk.
+
+Hello world:
+    class Simple{  
+    	public static void main(String args[]){  
+     	System.out.println("Hello Java");  
+    	}  
+    }
+
+system - class, out - object, println - method.
+To execute javac simple.java
+           java simple
+
+4. Resolving an error "javac is not recognized as an internal or external command". For this we need to set Path.
+   1. Temporary : set path=C:\Program Files\Java\jdk1.6.0_23\bin
+   2. permenant : export PATH=$PATH:/home/jdk1.6.01/bin/
+5. Setting CLASSPATH:  
+
+
+
+6. process from compile to run time:
+   java code  ----> compiler  ---> Byte code 
+
+   Run time: 
+ 	class file ---> Class Loader ---> Bytecode verified ----> Interpreter ----> Runtime -----> Hardware
+7.JVM architecture :
+  		     It mainly contains class loader, memory area, executin engine etc...
+                     The memory area contains class area, stack, heap, Pc register which holds address of JVM, native method stack  which contains all native methods used in application.
+		     The execution engine contains a Virtual processeor, Interpreter, Just-in-time compiler which used to improve the performance.It compiles part of byte code which have same functionality at the same time when executing.
+	             Java native method interface is a framework which is used to communicate with other applications written in another languages like c,c++.
+Types of Variables:
+
+1) Local Variable
+A variable declared inside the body of the method is called local variable. You can use this variable only within that method and the other methods in the class aren't even aware that the variable exists.
+
+A local variable cannot be defined with "static" keyword.
+
+2) Instance Variable
+A variable declared inside the class but outside the body of the method, is called an instance variable. It is not declared as static.
+
+It is called an instance variable because its value is instance-specific and is not shared among instances.
+
+3) Static variable
+A variable that is declared as static is called a static variable. It cannot be local. You can create a single copy of the static variable and share it among all the instances of the class. 
+Memory allocation for static variables happens only once when the class is loaded in the memory.
+eg.
+public class A  
+{  
+    static int m=100;//static variable  
+    void method()  
+    {    
+        int n=90;//local variable    
+    }  
+    public static void main(String args[])  
+    {  
+        int data=50;//instance variable    
+    }  
+}//end of class
+
+Data Types:
+ primitive :       boolean, char, short, int,  byte, long, double, float.
+ Non-primitive:    classes, interfaces, arrays.
+
+Some of the Keywords that different from cpp:
+
+
+extends: Java extends keyword is used to indicate that a class is derived from another class or interface.
+final: Java final keyword is used to indicate that a variable holds a constant value. It is used with a variable. It is used to restrict the user from updating the value of the variable.
+finally: Java finally keyword indicates a block of code in a try-catch structure. This block is always executed whether an exception is handled or not.
+implements: Java implements keyword is used to implement an interface.
+import: Java import keyword makes classes and interfaces available and accessible to the current source code.
+instanceof: Java instanceof keyword is used to test whether the object is an instance of the specified class or implements an interface.
+interface: Java interface keyword is used to declare an interface. It can have only abstract methods.
+native: Java native keyword is used to specify that a method is implemented in native code using JNI (Java Native Interface).
+package: Java package keyword is used to declare a Java package that includes the classes.
+strictfp: Java strictfp is used to restrict the floating-point calculations to ensure portability.
+super: Java super keyword is a reference variable that is used to refer to parent class objects. It can be used to invoke the immediate parent class method.
+synchronized: Java synchronized keyword is used to specify the critical sections or methods in multithreaded code.
+throws: The Java throws keyword is used to declare an exception. Checked exceptions can be propagated with throws.
+transient: Java transient keyword is used in serialization. If you define any data member as transient, it will not be serialized.
+volatile: Java volatile keyword is used to indicate that a variable may change asynchronously.
+
+cONSTRUCTOR:  
+In java there are two constructors present:
+1. no-arg constructor / default constructor
+2. Parameterized constructor
+
+note: There is no copy constructor in java, but there are many ways to copy the values of one object into another. They are:
+By Constructor
+By Assigning the values of one object into another
+By clone() method of Object class
+
+THIS Keyword : In Java this is a keyword which is a reference variable that refers to the current object.
+
+eg1. 
+
+class A{  
+void m(){System.out.println("hello m");}  
+void n(){  
+System.out.println("hello n");  
+//m();//same as this.m()  
+this.m();  
+}  
+}  
+class TestThis4{  
+public static void main(String args[]){  
+A a=new A();  
+a.n();  
+}}  
+
+
+eg2. this() : to invoke current class constructor
+The this() constructor call can be used to invoke the current class constructor. It is used to reuse the constructor. In other words, it is used for constructor chaining.
+
+Calling default constructor from parameterized constructor:
+
+class A{  
+A(){System.out.println("hello a");}  
+A(int x){  
+this();  
+System.out.println(x);  
+}  
+}  
+class TestThis5{  
+public static void main(String args[]){  
+A a=new A(10);  
+}}  
+
+NOTE: In above statements call to this() must be first statement in a constructor
+THIS can be passed as a argument in a constructor call and for a method
+
+
+INHERITANCE:
+
+syntax: class Subclass-name extends Superclass-name  
+{  
+   //methods and fields  
+}  
+
+Aggregation:
+
+If a class have an entity reference, it is known as Aggregation. Aggregation represents HAS-A relationship.
+
+public class Address {  
+String city,state,country;  
+  
+public Address(String city, String state, String country) {  
+    this.city = city;  
+    this.state = state;  
+    this.country = country;  
+}  
+  
+}  
+Emp.java
+public class Emp {  
+int id;  
+String name;  
+Address address;  
+  
+public Emp(int id, String name,Address address) {  
+    this.id = id;  
+    this.name = name;  
+    this.address=address;  
+}  
+  
+void display(){  
+System.out.println(id+" "+name);  
+System.out.println(address.city+" "+address.state+" "+address.country);  
+}  
+  
+public static void main(String[] args) {  
+Address address1=new Address("gzb","UP","india");  
+Address address2=new Address("gno","UP","india");  
+  
+Emp e=new Emp(111,"varun",address1);  
+Emp e2=new Emp(112,"arun",address2);  
+      
+e.display();  
+e2.display();  
+      
+}  
+}  
+
+Covariant returntype in method overriding:
+
+class A{    
+A get(){return this;}    
+}    
+    
+class B1 extends A{    
+@Override  
+B1 get(){return this;}    
+void message(){System.out.println("welcome to covariant return type");}    
+    
+public static void main(String args[]){    
+new B1().get().message();    
+}    
+}   
+
+Super keyword:
+
+The super keyword in Java is a reference variable which is used to refer immediate parent class object.
+class Animal{  
+String color="white";  
+}  
+class Dog extends Animal{  
+String color="black";  
+void printColor(){  
+System.out.println(color);//prints color of Dog class  
+System.out.println(super.color);//prints color of Animal class  
+}  
+}  
+class TestSuper1{  
+public static void main(String args[]){  
+Dog d=new Dog();  
+d.printColor();  
+}} 
+
+For constructor:
+
+class Animal{  
+Animal(){System.out.println("animal is created");}  
+}  
+class Dog extends Animal{  
+Dog(){  
+super();  
+System.out.println("dog is created");  
+}  
+}  
+class TestSuper3{  
+public static void main(String args[]){  
+Dog d=new Dog();  
+}}   
+
+note: As we know well that default constructor is provided by compiler automatically if there is no constructor. But, it also adds super() as the first statement.
+
+Instance initializer block:
+Instance Initializer block is used to initialize the instance data member. It run each time when object of the class is created. 	
+The java compiler copies the instance initializer block in the constructor after the first statement super(). 
+class Bike8{  
+    int speed;  
+      
+    Bike8(){System.out.println("constructor is invoked");}  
+   
+    {System.out.println("instance initializer block invoked");}  
+       
+    public static void main(String args[]){  
+    Bike8 b1=new Bike8();  
+    Bike8 b2=new Bike8();  
+    }      
+}  
+
+Final keyword:
+The final keyword in java is used to restrict the user.
+If you make any variable as final,class as final, method as final, you cannot change or override it.(It will be constant).It will be inherit but cant override.
+If declaration is blank as a normal or static it can be initialized through constructor only and for static through static block.
+class Bike10{  
+  final int speedlimit;//blank final variable  
+    
+  Bike10(){  
+  speedlimit=70;  
+  System.out.println(speedlimit);  
+  }  
+  
+  public static void main(String args[]){  
+    new Bike10();  
+ }  
+}  
+class A{  
+  static final int data;//static blank final variable  
+  static{ data=50;}  
+  public static void main(String args[]){  
+    System.out.println(A.data);  
+ }  
+}  
+
+Abstract class:
+Abstraction is a process of hiding the implementation details and showing only functionality to the user.
+A class which is declared with the abstract keyword is known as an abstract class in Java. It can have abstract and non-abstract methods (method with the body).
+note: The abstract keyword is a non-access modifier, used for classes and methods: Abstract class: is a restricted class that cannot be used to create objects (to access it, it must be inherited from another class). Abstract method: can only be used in an abstract class, and it does not have a body.
+
+eg://Example of an abstract class that has abstract and non-abstract methods  
+ abstract class Bike{  
+   Bike(){System.out.println("bike is created");}  
+   abstract void run();  
+   void changeGear(){System.out.println("gear changed");}  
+ }  
+//Creating a Child class which inherits Abstract class  
+ class Honda extends Bike{  
+ void run(){System.out.println("running safely..");}  
+ }  
+//Creating a Test class which calls abstract and non-abstract methods  
+ class TestAbstraction2{  
+ public static void main(String args[]){  
+  Bike obj = new Honda();  
+  obj.run();  
+  obj.changeGear();  
+ }  
+}
+
+Rule: If there is an abstract method in a class, that class must be abstract.
+
+
+INTERFACE: 
+An interface in Java is a blueprint of a class. It has static constants and abstract methods.
+The interface in Java is a mechanism to achieve abstraction. There can be only abstract methods in the Java interface, not method body. 
+It is used to achieve abstraction and multiple inheritance in Java.
+
+
+note:  It cannot be instantiated just like the abstract class.
+
+Uses:
+Uses of Interfaces in Java are mentioned below:
+
+It is used to achieve total abstraction.
+Since java does not support multiple inheritances in the case of class, by using an interface it can achieve multiple inheritances.
+Any class can extend only 1 class but can any class implement an infinite number of interface.
+It is also used to achieve loose coupling.
+Interfaces are used to implement abstraction. 
+
+Since Java 8, we can have default and static methods in an interface.
+
+Since Java 9, we can have private methods in an interface.
+Since Java 8, we can have static method in interface. Let's see an example:
+
+In this example, the Printable interface has only one method, and its implementation is provided in the A6 class.
+
+interface printable{  
+void print();  
+}  
+class A6 implements printable{  
+public void print(){System.out.println("Hello");}  
+  
+public static void main(String args[]){  
+A6 obj = new A6();  
+obj.print();  
+ }  
+}  
+
+Since Java 8, we can have method body in interface. But we need to make it default method. Let's see an example:
+
+File: TestInterfaceDefault.java
+
+interface Drawable{  
+void draw();  
+default void msg(){System.out.println("default method");}  
+}  
+class Rectangle implements Drawable{  
+public void draw(){System.out.println("drawing rectangle");}  
+}  
+class TestInterfaceDefault{  
+public static void main(String args[]){  
+Drawable d=new Rectangle();  
+d.draw();  
+d.msg();  
+}}  
+
+Java Interfaces Examples
+ Let’s consider the example of vehicles like bicycles, cars, bikes, etc they have common functionalities. So we make an interface and put all these common functionalities. And lets Bicycle, Bike, car, etc implement all these functionalities in their own class in their own way.
+
+Below is the implementation of the above topic:
+
+Java
+
+// Java program to demonstrate the 
+// real-world example of Interfaces
+ 
+import java.io.*;
+ 
+interface Vehicle {
+     
+    // all are the abstract methods.
+    void changeGear(int a);
+    void speedUp(int a);
+    void applyBrakes(int a);
+}
+ 
+class Bicycle implements Vehicle{
+     
+    int speed;
+    int gear;
+     
+    // to change gear
+    @Override
+    public void changeGear(int newGear){
+         
+        gear = newGear;
+    }
+     
+    // to increase speed
+    @Override
+    public void speedUp(int increment){
+         
+        speed = speed + increment;
+    }
+     
+    // to decrease speed
+    @Override
+    public void applyBrakes(int decrement){
+         
+        speed = speed - decrement;
+    }
+     
+    public void printStates() {
+        System.out.println("speed: " + speed
+            + " gear: " + gear);
+    }
+}
+ 
+class Bike implements Vehicle {
+     
+    int speed;
+    int gear;
+     
+    // to change gear
+    @Override
+    public void changeGear(int newGear){
+         
+        gear = newGear;
+    }
+     
+    // to increase speed
+    @Override
+    public void speedUp(int increment){
+         
+        speed = speed + increment;
+    }
+     
+    // to decrease speed
+    @Override
+    public void applyBrakes(int decrement){
+         
+        speed = speed - decrement;
+    }
+     
+    public void printStates() {
+        System.out.println("speed: " + speed
+            + " gear: " + gear);
+    }
+     
+}
+class GFG {
+     
+    public static void main (String[] args) {
+     
+        // creating an instance of Bicycle
+        // doing some operations
+        Bicycle bicycle = new Bicycle();
+        bicycle.changeGear(2);
+        bicycle.speedUp(3);
+        bicycle.applyBrakes(1);
+         
+        System.out.println("Bicycle present state :");
+        bicycle.printStates();
+         
+        // creating instance of the bike.
+        Bike bike = new Bike();
+        bike.changeGear(1);
+        bike.speedUp(4);
+        bike.applyBrakes(3);
+         
+        System.out.println("Bike present state :");
+        bike.printStates();
+    }
+}
+Output
+Bicycle present state :
+speed: 2 gear: 2
+Bike present state :
+
+JAVA PACKAGE:The package keyword is used to create a package in java.
+
+//save as Simple.java  
+package mypack;  
+public class Simple{  
+ public static void main(String args[]){  
+    System.out.println("Welcome to package");  
+   }  
+}  
+
+to compile: javac -d path filename.
+to run :   mypack.simple
+
+How to send the class file to another directory or drive?
+
+
+
+
+Access modifiers:
+
+Private: The access level of a private modifier is only within the class. It cannot be accessed from outside the class.
+Default: The access level of a default modifier is only within the package. It cannot be accessed from outside the package. If you do not specify any access level, it will be the default.
+Protected: The access level of a protected modifier is within the package and outside the package through child class. If you do not make the child class, it cannot be accessed from outside the package.
+Public: The access level of a public modifier is everywhere. It can be accessed from within the class, outside the class, within the package and outside the package.
+
+note: The protected access modifier can be applied on the data member, method and constructor. It can't be applied on the class.
+
+
+Object cloning in java:
+
+The object cloning is a way to create exact copy of an object. The clone() method of Object class is used to clone an object.
+The java.lang.Cloneable interface must be implemented by the class whose object clone we want to create. If we don't implement Cloneable interface, clone() method generates CloneNotSupportedException.
+
+The clone() method is defined in the Object class. Syntax of the clone() method is as follows:
+
+-->  protected Object clone() throws CloneNotSupportedException 
+
+eg. Let's see the simple example of object cloning
+
+class Student18 implements Cloneable{  
+int rollno;  
+String name;  
+  
+Student18(int rollno,String name){  
+this.rollno=rollno;  
+this.name=name;  
+}  
+  
+public Object clone()throws CloneNotSupportedException{  
+return super.clone();  
+}  
+  
+public static void main(String args[]){  
+try{  
+Student18 s1=new Student18(101,"amit");  
+  
+Student18 s2=(Student18)s1.clone();  
+  
+System.out.println(s1.rollno+" "+s1.name);  
+System.out.println(s2.rollno+" "+s2.name);  
+  
+}catch(CloneNotSupportedException c){}  
+  
+}  
+}  
+
+
+JAVA Math class:
+public class JavaMathExample1    
+{    
+    public static void main(String[] args)     
+    {    
+        double x = 28;    
+        double y = 4;    
+          
+        // return the maximum of two numbers  
+        System.out.println("Maximum number of x and y is: " +Math.max(x, y));   
+          
+        // return the square root of y   
+        System.out.println("Square root of y is: " + Math.sqrt(y));   
+          
+        //returns 28 power of 4 i.e. 28*28*28*28    
+        System.out.println("Power of x and y is: " + Math.pow(x, y));      
+  
+        // return the logarithm of given value       
+        System.out.println("Logarithm of x is: " + Math.log(x));   
+        System.out.println("Logarithm of y is: " + Math.log(y));  
+          
+        // return the logarithm of given value when base is 10      
+        System.out.println("log10 of x is: " + Math.log10(x));   
+        System.out.println("log10 of y is: " + Math.log10(y));    
+          
+        // return the log of x + 1  
+        System.out.println("log1p of x is: " +Math.log1p(x));    
+  
+        // return a power of 2    
+        System.out.println("exp of a is: " +Math.exp(x));    
+          
+        // return (a power of 2)-1  
+        System.out.println("expm1 of a is: " +Math.expm1(x));  
+    }    
+}    
+
+JAVA strictfp Keyword:
+Java strictfp keyword ensures that you will get the same result on every platform if you perform operations in the floating-point variable. 
+The precision may differ from platform to platform that is why java programming language have provided the strictfp keyword, so that you get same result on every platform. 
+So, now you have better control over the floating-point arithmetic.
+
+The strictfp keyword can be applied on methods, classes and interfaces
+
+strictfp class A{}//strictfp applied on class  
+strictfp interface M{}//strictfp applied on interface  
+class A{  
+strictfp void m(){}//strictfp applied on method  
+}  
+
+The strictfp keyword cannot be applied on abstract methods, variables or constructors.
+class B{  
+strictfp abstract void m();//Illegal combination of modifiers  
+}  
+class B{  
+strictfp int data=10;//modifier strictfp not allowed here  
+}  
+class B{  
+strictfp B(){}//modifier strictfp not allowed here  
+}  
+
+Creating API Document | javadoc tool:
+
+package com.abc;  
+/** This class is a user-defined class that contains one methods cube.*/  
+public class M{  
+  
+/** The cube method prints cube of the given number */  
+public static void  cube(int n){System.out.println(n*n*n);}  
+}  
+
+To create the document API, you need to use the javadoc tool followed by java file name. There is no need to compile the javafile.
+
+On the command prompt, you need to write:
+--> javadoc M.java
+to generate the document api. Now, there will be created a lot of html files. Open the index.html file to get the information about the classes.
+
+COMMAND LINE ARGUMENTS:
+
+class A{  
+public static void main(String args[]){  
+  
+for(int i=0;i<args.length;i++)  
+System.out.println(args[i]);  
+  
+}  
+}  
+
+
+JAVA STRING:
+char[] ch={'j','a','v','a','t','p','o','i','n','t'};  
+String s=new String(ch);  
+is same as:
+String s="javatpoint";  
+
+Java String class provides a lot of methods to perform operations on strings such as compare(), concat(), equals(), split(), length(), replace(), compareTo(), intern(), substring() etc.
+
+The java.lang.String class implements Serializable, Comparable and CharSequence interfaces.
+
+--->  There are two ways to create String object:
+
+      By string literal    ----     String s="welcome";
+      By new keyword       ----	    String s= new String("welcome");
+
+Strings are immutable , but StringBuffer and StringBuilder are mutable.
+
+Note: After a string literal, all the + will be treated as string concatenation operator.
+
+--> String concatenation using StringBuilder class:
+public class StrBuilder  
+{  
+    /* Driver Code */  
+    public static void main(String args[])  
+    {  
+        StringBuilder s1 = new StringBuilder("Hello");    //String 1  
+        StringBuilder s2 = new StringBuilder(" World");    //String 2  
+        StringBuilder s = s1.append(s2);   //String 3 to store the result  
+            System.out.println(s.toString());  //Displays result  
+    }  
+}  
+
+--> Using string format:
+public class StrFormat  
+{  
+    /* Driver Code */  
+    public static void main(String args[])  
+    {  
+        String s1 = new String("Hello");    //String 1  
+        String s2 = new String(" World");    //String 2  
+        String s = String.format("%s%s",s1,s2);   //String 3 to store the result  
+            System.out.println(s.toString());  //Displays result  
+    }  
+}  
+
+Substring :
+
+String s="hello";    
+System.out.println(s.substring(0,2)); //returns he  as a substring  
+
+MULTITHREADING:
+
+creating thread:
+There are two ways to create a thread:
+
+1.By extending Thread class
+2.By implementing Runnable interface.
+
+Commonly used Constructors of Thread class:
+
+Thread()
+Thread(String name)
+Thread(Runnable r)
+Thread(Runnable r,String name)
+
+class Multi3 implements Runnable{  
+public void run(){  
+System.out.println("thread is running...");  
+}  
+  
+public static void main(String args[]){  
+Multi3 m1=new Multi3();  
+Thread t1 =new Thread(m1);   // Using the constructor Thread(Runnable r)  
+t1.start();  
+ }  
+}  
+ join() method:
+
+class TestJoinMethod1 extends Thread{    
+ public void run(){    
+  for(int i=1;i<=5;i++){    
+   try{    
+    Thread.sleep(500);    
+   }catch(Exception e){System.out.println(e);}    
+  System.out.println(i);    
+  }    
+ }    
+public static void main(String args[]){    
+ TestJoinMethod1 t1=new TestJoinMethod1();    
+ TestJoinMethod1 t2=new TestJoinMethod1();    
+ TestJoinMethod1 t3=new TestJoinMethod1();    
+ t1.start();    
+ try{    
+  t1.join();    
+ }catch(Exception e){System.out.println(e);}    
+    
+ t2.start();    
+ t3.start();    
+ }    
+}    
+
+naming a thread:
+  t1.setName("Sonoo Jaiswal");  
+
+Thread Priority:
+th1.setPriority(6);  
+th2.setPriority(3);  
+th3.setPriority(9);  
+
+Daemon Thread:
+
+ if(Thread.currentThread().isDaemon()){//checking for daemon thread  
+   System.out.println("daemon thread work");  
+
+t1.setDaemon(true);//now t1 is daemon thread  
+Note: If you want to make a user thread as Daemon, it must not be started otherwise it will throw IllegalThreadStateException.g
+  t1.start();  
+  t1.setDaemon(true);//will throw exception here  
+
+
+THREAD GROUP:
+
+Java provides a convenient way to group multiple threads in a single object. In such a way, we can suspend, resume or interrupt a group of threads by a single method call.
+Java thread group is implemented by java.lang.ThreadGroup class.
+
+A ThreadGroup represents a set of threads. A thread group can also include the other thread group. The thread group creates a tree in which every thread group except the initial thread group has a parent.
+
+public class ThreadGroupDemo implements Runnable{    
+    public void run() {    
+          System.out.println(Thread.currentThread().getName());    
+    }    
+   public static void main(String[] args) {    
+      ThreadGroupDemo runnable = new ThreadGroupDemo();    
+          ThreadGroup tg1 = new ThreadGroup("Parent ThreadGroup");    
+              
+          Thread t1 = new Thread(tg1, runnable,"one");    
+          t1.start();    
+          Thread t2 = new Thread(tg1, runnable,"two");    
+          t2.start();    
+          Thread t3 = new Thread(tg1, runnable,"three");    
+          t3.start();    
+                 
+          System.out.println("Thread Group Name: "+tg1.getName());    
+         tg1.list();    
+    
+    }    
+   }
+
+
+note: New Thread creation: When a program calls the start() method, a new thread is created and then the run() method is executed. 
+But if we directly call the run() method then no new thread will be created and run() method will be executed as a normal method call on the current calling thread itself and no multi-threading will take place.
+
+SYNCHRONIZATION IN JAVA:
+This synchronization is implemented in Java with a concept called monitors or locks. Only one thread can own a monitor at a given time. When a thread acquires a lock, it is said to have entered the monitor. 
+All other threads attempting to enter the locked monitor will be suspended until the first thread exits the monitor.
+SYNTAX:
+// Only one thread can execute at a time. 
+// sync_object is a reference to an object
+// whose lock associates with the monitor. 
+// The code is said to be synchronized on
+// the monitor object
+synchronized(sync_object)
+{
+   // Access shared variables and other
+   // shared resources
+}
+
+Types of Synchronization
+There are two synchronizations in Java mentioned below:
+
+Process Synchronization
+Thread Synchronization
+1. Process Synchronization in Java :
+Process Synchronization is a technique used to coordinate the execution of multiple processes. It ensures that the shared resources are safe and in order.
+
+2. Thread Synchronization in Java :
+Thread Synchronization is used to coordinate and ordering of the execution of the threads in a multi-threaded program. There are two types of thread synchronization are mentioned below:
+
+Mutual Exclusive 
+Cooperation (Inter-thread communication in Java)
+Mutual Exclusive
+Mutual Exclusive helps keep threads from interfering with one another while sharing data. There are three types of Mutual Exclusive mentioned below:
+
+Synchronized method.
+Synchronized block.
+Static synchronization.
+
+// A Java program to demonstrate working of
+// synchronized.
+ 
+import java.io.*;
+import java.util.*;
+ 
+// A Class used to send a message
+class Sender {
+    public void send(String msg)
+    {
+        System.out.println("Sending\t" + msg);
+        try {
+            Thread.sleep(1000);
+        }
+        catch (Exception e) {
+            System.out.println("Thread  interrupted.");
+        }
+        System.out.println("\n" + msg + "Sent");
+    }
+}
+ 
+// Class for send a message using Threads
+class ThreadedSend extends Thread {
+    private String msg;
+    Sender sender;
+ 
+    // Receives a message object and a string
+    // message to be sent
+    ThreadedSend(String m, Sender obj)
+    {
+        msg = m;
+        sender = obj;
+    }
+ 
+    public void run()
+    {
+        // Only one thread can send a message
+        // at a time.
+        synchronized (sender)
+        {
+            // synchronizing the send object
+            sender.send(msg);
+        }
+    }
+}
+ 
+// Driver class
+class SyncDemo {
+    public static void main(String args[])
+    {
+        Sender send = new Sender();
+        ThreadedSend S1 = new ThreadedSend(" Hi ", send);
+        ThreadedSend S2 = new ThreadedSend(" Bye ", send);
+ 
+        // Start two threads of ThreadedSend type
+        S1.start();
+        S2.start();
+ 
+        // wait for threads to end
+        try {
+            S1.join();
+            S2.join();
+        }
+        catch (Exception e) {
+            System.out.println("Interrupted");
+        }
+    }
+}
+Output
+Sending     Hi 
+
+ Hi Sent
+Sending     Bye 
+
+ Bye Sent
+
+JVM SHUTDOWN HOOK:
+A special construct that facilitates the developers to add some code that has to be run when the Java Virtual Machine (JVM) is shutting down is known as the Java shutdown hook.
+
+finalize() method
+The finalize() method is invoked each time before the object is garbage collected. This method can be used to perform cleanup processing. This method is defined in Object class as:
+
+protected void finalize(){}  
+Note: The Garbage collector of JVM collects only those objects that are created by new keyword. So if you have created any object without new, you can use finalize method to perform cleanup processing (destroying remaining objects).
+
+gc() method
+The gc() method is used to invoke the garbage collector to perform cleanup processing. The gc() is found in System and Runtime classes.
+
+public static void gc(){}  
+
+Note: Garbage collection is performed by a daemon thread called Garbage Collector(GC). This thread calls the finalize() method before object is garbage collected.
+
+public class TestGarbage1{  
+ public void finalize(){System.out.println("object is garbage collected");}  
+ public static void main(String args[]){  
+  TestGarbage1 s1=new TestGarbage1();  
+  TestGarbage1 s2=new TestGarbage1();  
+  s1=null;  
+  s2=null;  
+  System.gc();  
+ }  
+}  
+
+output:    object is garbage collected
+       object is garbage collected
+
+Note: Neither finalization nor garbage collection is guaranteed.
+
+COLLECTIONS IN JAVA(Collection interace):
+
+It contains mainly 3 child interfaces: 
+1. Lists :   Arraylist, linkedlist, vector, stack
+2. Queue : priorityqueue, Dequeue, Arraydequeue
+3. Set   :  Hashset, LinkedHashset, sortedset, Treeset
+    
+JAVA ARRAYLIST:
+
+Java ArrayList class can contain duplicate elements.
+Java ArrayList class maintains insertion order.
+Java ArrayList class is non synchronized.
+Java ArrayList allows random access because the array works on an index basis.
+In ArrayList, manipulation is a little bit slower than the LinkedList in Java because a lot of shifting needs to occur if any element is removed from the array list.
+We can not create an array list of the primitive types, such as int, float, char, etc. It is required to use the required wrapper class in such cases. For example:
+ArrayList<int> al = ArrayList<int>(); // does not work  
+ArrayList<Integer> al = new ArrayList<Integer>(); // works fine 
+
+eg:--
+
+import java.util.*;  
+public class ArrayListExample2{  
+ public static void main(String args[]){  
+  ArrayList<String> list=new ArrayList<String>();//Creating arraylist  
+  list.add("Mango");//Adding object in arraylist    
+  list.add("Apple");    
+  list.add("Banana");    
+  list.add("Grapes");    
+  //Traversing list through Iterator  
+  Iterator itr=list.iterator();//getting the Iterator  
+  while(itr.hasNext()){//check if iterator has the elements  
+   System.out.println(itr.next());//printing the element and move to next  
+  }  
+ }  
+}  
+
+1. Collections.sort(list1);   
+2. for(String fruit:list)    
+    System.out.println(fruit);    
+3.  al.set(1,"Dates");   
+
+
+Different methods of looping :
+eg:   
+
+import java.util.*;  
+class ArrayList4{  
+ public static void main(String args[]){  
+    ArrayList<String> list=new ArrayList<String>();//Creating arraylist  
+           list.add("Ravi");//Adding object in arraylist  
+           list.add("Vijay");  
+           list.add("Ravi");  
+           list.add("Ajay");  
+            
+           System.out.println("Traversing list through List Iterator:");  
+           //Here, element iterates in reverse order  
+              ListIterator<String> list1=list.listIterator(list.size());  
+              while(list1.hasPrevious())  
+              {  
+                  String str=list1.previous();  
+                  System.out.println(str);  
+              }  
+        System.out.println("Traversing list through for loop:");  
+           for(int i=0;i<list.size();i++)  
+           {  
+            System.out.println(list.get(i));     
+           }  
+              
+        System.out.println("Traversing list through forEach() method:");  
+        //The forEach() method is a new feature, introduced in Java 8.  
+            list.forEach(a->{ //Here, we are using lambda expression  
+                System.out.println(a);  
+              });  
+                
+            System.out.println("Traversing list through forEachRemaining() method:");  
+              Iterator<String> itr=list.iterator();  
+              itr.forEachRemaining(a-> //Here, we are using lambda expression  
+              {  
+            System.out.println(a);  
+              });  
+ }  
+}  
+
+
+
+different types of adding:
+
+  al.addAll(1, al3);  
+  al.addAll(al2);  
+
+
+When to use linked list and Arraylist: 
+
+ArrayList provides constant time for search operation, so it is better to use ArrayList if searching is more frequent operation than add and remove operation. 
+The LinkedList provides constant time for add and remove operations. So it is better to use LinkedList for manipulation.
+LinkedLinked class implements Deque interface also, so you can get the functionality of double ended queue in LinkedList. The ArrayList class doesn't implement Deque interface.
+
+
+Note: In sort, ArrayList is better to access data wherease LinkedList is better to manipulate data. Both classes implements List interface.
+
+
+HASHSET:
+HashSet stores the elements by using a mechanism called hashing.
+HashSet contains unique elements only.
+HashSet allows null value.
+HashSet class is non synchronized.
+HashSet doesn't maintain the insertion order. Here, elements are inserted on the basis of their hashcode.
+HashSet is the best approach for search operations.
+The initial default capacity of HashSet is 16, and the load factor is 0.75.
+
+EG:
+import java.util.*;  
+class HashSet2{  
+ public static void main(String args[]){  
+  //Creating HashSet and adding elements  
+  HashSet<String> set=new HashSet<String>();  
+  set.add("Ravi");  
+  set.add("Vijay");  
+  set.add("Ravi");  
+  set.add("Ajay");  
+  //Traversing elements  
+  Iterator<String> itr=set.iterator();  
+  while(itr.hasNext()){  
+   System.out.println(itr.next());  
+  }  
+ }  
+}  
+       Ajay
+       Vijay
+       Ravi
+
+QUEUE:
+
+import java.util.*;  
+class TestCollection12{  
+public static void main(String args[]){  
+PriorityQueue<String> queue=new PriorityQueue<String>();  
+queue.add("Amit");  
+queue.add("Vijay");  
+queue.add("Karan");  
+queue.add("Jai");  
+queue.add("Rahul");  
+System.out.println("head:"+queue.element());  
+System.out.println("head:"+queue.peek());  
+System.out.println("iterating the queue elements:");  
+Iterator itr=queue.iterator();  
+while(itr.hasNext()){  
+System.out.println(itr.next());  
+}  
+queue.remove();  
+queue.poll();  
+System.out.println("after removing two elements:");  
+Iterator<String> itr2=queue.iterator();  
+while(itr2.hasNext()){  
+System.out.println(itr2.next());  
+}  
+}  
+}  
+Test it Now
+Output:
+
+head:Amit
+       head:Amit
+       iterating the queue elements:
+       Amit
+       Jai
+       Karan
+       Vijay
+       Rahul
+       after removing two elements:
+       Karan
+       Rahul
+       Vijay

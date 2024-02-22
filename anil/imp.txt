@@ -1,0 +1,61 @@
+conti ID :  uif27841
+password : Madhu@123456789
+links:  https://citrix-web.conti.de/Citrix/XenAppWeb/
+
+
+artifactory :  https://artifactory.elektrobit.com/ui/login/
+
+artifactory password :  AKCp8nGu8xHvWegL8Qec12wTC6b5FGUHbVB9xufrFzJMtvKfgsTNQmrLhBBaQ97YHZCMAjJ5S
+
+
+Admin rights :  https://getit.ebgroup.elektrobit.com/
+
+
+local ssh key password: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
+
+
+aws iot git :   https://github.com/aws/aws-iot-device-sdk-cpp-v2
+
+
+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
+
+cmVmdGtuOjAxOjE2OTk1NDI5Njc6cHRVNHRpRjRKVWYwRUQ3ZGlWMkdKZHlVMkQw
+
+Hostname: raspiR4-hsc-026
+IP: 10.0.99.156
+User: pi
+Password: 4GtQy5s$?=
+
+On the /home/pi/ directory you can find several python scripts to control the power supply to the target board:
+target_poweroff.py 
+target_reset.py
+target_poweron.py
+target_status.py
+
+command e.g.: python3 target_reset.py
+
+The target board is reachable via ethernet device ‘usb0’ and IP 10.0.0.10.
+For ssh connection user ‘appldev’ and ssh key is needed:
+
+ssh appldev@10.0.0.10 -i /home/pi/Honda4G/delivery/sshkeys/leap-cat-ssh-appldev
+
+
+
+
+
+conan build :
+
+conan install . -if build_tcu --profile:host=Gcc11 --profile:build=Build_linux --profile:host=Release
+conan build . -if build_tcu -bf build_tcu
+conan package . -if build_tcu -bf build_tcu -pf package
+
+
+find / -iname GTestWrapp*
+
+Bullseye :
+https://confluence.auto.continental.cloud/pages/viewpage.action?spaceKey=SPACE1591&title=EB-Conti+Sync+Call%3A+Minutes
+
+git add path
+git commit -m "" 
+git push origin feature/HONDALCOTAPOCINT-228
+

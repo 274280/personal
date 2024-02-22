@@ -1,0 +1,197 @@
+CALL BACK FUNCTIONS
+
+A call back function is a function passed as an argument to another function, which is then invoked inside the outerfunction to complete some kind of action.In c++, it can be of 3 types1. Function pointers2.function objects / Functors3.Lambda functions
+
+FUNCTION POINTER :
+
+Unlike normal pointers, the function pointer pointes to function.
+It stores the address of the function.
+Syntax :
+               return_type ( * funptr) ( arguments);
+FUNCTION OBJECT/FUNCTOR :
+
+Object of a class which has overloaded operator ()  is called function object.
+  syntax :
+        return _type  operator () (arguments)  { }
+LAMBDA FUNCTION:
+These are kind of anonymous functions, which compiler internally calls this function.
+Syntax : 
+      [ ] (arguments) { }
+
+[ ]   = if we want to access outer scope elements in the function.
+      It can be done in two ways 
+       1.  By value     [=]
+       2.  By Reference  [&]
+VARIADIC TEMPLATES:
+
+Variadic templates allows a function to take variable number of arguments of any type.
+ syntax :
+      template<typename t, typename …  Args>
+      return_type   fun( t  first, Args …  args) {  
+      fun(args …);
+      }
+ A dummy loop should be there to break chain.
+       fun() {  }
+Auto specifier :
+       1. we can declare a variable without specifying its type.
+       2. Its type will be deduced by the data to which its initializing.
+       e.g.  auto   var =  5;
+
+
+Delete keyword: 
+    1. we can apply the delete keyword to  functions to make them uncallable.
+      2. we can restrict the member functions to prevent data loss conversions.
+       e.g.  Void fun()  = delete;
+SMART POINTERS:
+UNIQUE POINTER :
+     1. A unique_ptr object wraps around a raw pointer around its life time.
+     2. when the object is destructed then in its destructor it deletes the associated raw pointer.
+     syntax:   std:: unique_ptr < task > object(new task());  
+SHARED POINTER:
+      1. It follows the concept of shared ownership, different shared_ptr objects can be associated with same pointer
+      2. It uses reference counting mechanism .
+WEAK POINTER:
+    1. It allows sharing but not owning the object. 
+TUPLES:
+Tuples are used to store multiple items in a single variable.
+It is a collection which is in ordered and unchangeable.
+        e.g.      std::tuple<int, double, std::string> result(7, 9.8, "text");
+Headerfile  <tuple> must be included.
+It helps us to avoid unnecessary structures.
+UNORDERED SET : 
+       1. It is an STL associative container, which provides a functionality of set.
+       2.It can contain unique elements only.
+       3. It stores the elements internally using Hash Table.
+          e.g. std::unordered_set<T> obj;
+
+UNORDERED MAP :
+       1.It  provides functionality of map, which store the elements with key value pair and with unique key only.
+       2.It internally uses the hashing to store elements.
+       eg. std::unordered_map<T> obj;
+
+
+STD::ASYNC:
+ If you want call a function asynchronously we can use std::async. we can catch the result using std::future.
+
+auto result = std::async([]() { return perform_long_computation(); });
+MyResult finalResult = result.get();
+
+simply expanding auto--------------------------------
+
+std::future<MyResult> result = std::async([]() { 
+    return perform_long_computation(); 
+});
+MyResult finalResult = result.get();
+
+
+example:    
+
+
+#include <thread>
+#include <iostream>
+#include <vector>
+#include <numeric>
+#include <future>
+
+int main() {
+    std::future<std::vector<int>> iotaFuture = std::async(std::launch::async, 
+         [startArg = 1]() {
+            std::vector<int> numbers(25);
+            std::iota(numbers.begin(), numbers.end(), startArg);
+            std::cout << "calling from: " << std::this_thread::get_id() << " id\n";
+            std::cout << numbers.data() << '\n';
+            return numbers;
+        }
+    );
+
+    auto vec = iotaFuture.get(); // make sure we get the results...
+    std::cout << vec.data() << '\n';
+    std::cout << "printing in main (id " << std::this_thread::get_id() << "):\n";
+    for (auto& num : vec)
+        std::cout << num << ", ";
+    std::cout << '\n';
+    
+    
+    std::future<int> sumFuture = std::async(std::launch::async, [&vec]() {
+        const auto sum = std::accumulate(vec.begin(), vec.end(), 0);
+        std::cout << "accumulate in: " << std::this_thread::get_id() << " id\n";
+        return sum;
+    });
+    
+    const auto sum = sumFuture.get();
+    std::cout << "sum of numbers is: " << sum;
+    
+    return 0;
+}
+output:
+
+calling from: 139700048996096 thread id
+0x7f0e6c0008c0
+0x7f0e6c0008c0
+printing numbers in main (id 139700066928448):
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 
+accumulate in: 139700048996096 thread id
+sum of numbers is: 325
+
+->  std:: accumulate :
+
+			It will add all numbers between the range u passed when called. also u can pass some specific func to perform some specific task.
+
+std::accumulate(first, last, sum, myfun); 
+std::accumulate(a, a + 3, sum, myfun);
+
+The result will store in sum variable and it need to be initialise before passing.
+
+->  for_each :
+  
+              like doing do-while  simply we can use for the function which executing several iterations. to use "#include<algorithm> reequired.
+
+eg:   for_each(arr, arr + 5, printx2);
+
+
+std::transform :
+  	
+
+
+
+
+
+-> delegating constructor:
+
+
+
+
+
+
+
+-> rvalue,lvalue  references
+
+
+
+-> casting shared_ptr:
+	#include <iostream>
+#include <memory>
+ 
+struct BaseClass {};
+ 
+struct DerivedClass : BaseClass
+{
+    void f() const
+    {
+        std::cout << "Hello World!\n";
+    }
+};
+ 
+int main()
+{
+    std::shared_ptr<BaseClass> ptr_to_base(std::make_shared<DerivedClass>());
+ 
+    // ptr_to_base->f(); // Error won't compile: BaseClass has no member named 'f'
+ 
+    std::static_pointer_cast<DerivedClass>(ptr_to_base)->f(); // OK
+    // (constructs a temporary shared_ptr, then calls operator->)
+ 
+    static_cast<DerivedClass*>(ptr_to_base.get())->f(); // also OK
+    // (direct cast, does not construct a temporary shared_ptr)
+}
+

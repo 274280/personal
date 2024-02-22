@@ -1,0 +1,406 @@
+CALL BACK FUNCTIONS:
+
+USING FUNCTION POINTER:
+
+#include <iostream>
+using namespace std;
+int fun1(char *ch, int (*ptr)(int))
+{
+	int id1 = 1;
+	int id2 = 2;
+	int idr = (*ptr)(id2);
+	cout<<"principal function: "<<id1<<' '<<ch<<' '<<idr<<'\n';
+	return id1;
+     }
+int fun2(int iden)
+    {
+        cout<<"callback function"<<'\n';
+        return iden;
+    }
+
+int main()
+{
+    int (*ptr)(int) = &fun2;
+    char cha[] = "and";
+    fun1(cha, fun2);
+    return 0;
+}
+
+#include<iostream>
+#include<vector>
+using namespace std;
+void printvalue(int value) {
+    cout << "values :" << value << std::endl;
+}
+void foreach(const vector<int> &values, void (*func)(int)) 
+{
+    for(int value:values) 
+    func(value);
+}
+int main() {
+    vector<int> values = {1,5,4,3,2};
+    foreach(values,printvalue);
+}
+
+FUNCTOR:
+#include <iostream>
+#include<algorithm>
+using namespace std;
+class increment
+{
+private:
+    int num;
+public:
+    increment(int n) : num(n) {  }
+  
+
+    int operator () (int arr_num) const {
+        return num + arr_num;
+    }
+};
+
+int main()
+{
+    int arr[] = {1, 2, 3, 4, 5};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    int num = 5;
+  
+    std::transform(arr, arr+n, arr, increment(num));
+  
+    for (int i=0; i<n; i++)
+        cout << arr[i] << " ";
+}
+
+LAMBDA FUNCTION:
+
+#include <iostream>
+#include <string>
+int main()
+{
+    std::string msg = "Hello";
+    int counter = 10;
+   
+    auto func = [&msg, &counter]  () {
+        std::cout<<"Inside Lambda :: msg = "<<msg<<std::endl;
+        std::cout<<"Inside Lambda :: counter = "<<counter<<std::endl;
+        
+        msg = "Temp";
+        counter = 20;
+        std::cout<<"Inside Lambda :: After changing :: msg = "<<msg<<std::endl;
+        std::cout<<"Inside Lambda :: After changing :: counter = "<<counter<<std::endl;
+        };
+    func();
+    std::cout<<"msg = "<<msg<<std::endl;
+    std::cout<<"counter = "<<counter<<std::endl;
+    return 0;
+}
+
+VARIADIC TEMPLATES :
+#include <iostream>
+using namespace std;
+void print()
+{
+    cout << "empty" << endl;
+}
+ 
+ template <typename T, typename... Types>
+void print(T var1, Types... var2)
+{
+    cout << var1 << endl;
+ 
+    print(var2...);
+}
+ 
+int main()
+{
+    print(1, 2, 3.14,
+          "anil\n");
+ 
+    return 0;
+}
+
+
+DELETE KEYWORD:
+
+#include <iostream>
+#include <string>
+class User
+{
+    int id;
+    std::string name;
+public:
+    User(int userId, std::string userName) : id(userId), name(userName)
+    {}
+   
+    User(const User & obj) = delete;
+
+    User & operator = (const User & obj) = delete;
+    void display()
+    {
+        std::cout<<id << " ::: "<<name<<std::endl;
+    }
+    
+    User(double userId, std::string userName) = delete ;
+    User(char userId, std::string userName) = delete ;
+    void * operator new (size_t) = delete;
+};
+int main()
+{
+    User userObj(3, "John");
+    User obj = userObj;    // 
+    User obj4(5.5, "Riti");  //
+    obj4.display();
+    User obj5('a', "Riti"); 
+    obj5.display();
+    
+    User * ptr = new User(1, "Riti");
+    return 0;
+}
+
+SMART POINTERS:
+1.std:: unique_ptr<entity> obj;
+2.std:: shared_ptr<entity> obj;
+3. std::make_shared<entity> (arg);  =  Allocates and constructs an object of type T passing args to its constructor, and returns an object of type shared_ptr<T> that owns and stores a pointer to it (with a use count of 1).
+eg :std::shared_ptr<int> foo = std::make_shared<int> (10);
+
+#include <iostream>
+#include  <memory> 
+int main()
+{   
+    std::unique_ptr<int> u1(new int(20));
+    std::unique_ptr<int> u2(u1);   //
+    std::shared_ptr<int> p1 = std::make_shared<int>();
+    *p1 = 78;
+    std::cout << "p1 = " << *p1 << std::endl;
+    std::cout << "p1 Reference count = " << p1.use_count() << std::endl;
+    std::shared_ptr<int> p2(p1);
+    std::cout << "p2 Reference count = " << p2.use_count() << std::endl;
+    std::cout << "p1 Reference count = " << p1.use_count() << std::endl;
+        if (p1 == p2)
+    {
+        std::cout << "p1 and p2 are pointing to same pointer\n";
+    }
+    std::cout<<"Reset p1 "<<std::endl;
+    p1.reset();
+    std::cout << "p1 Reference Count = " << p1.use_count() << std::endl;
+    p1.reset(new int(11));
+    std::cout << "p1  Reference Count = " << p1.use_count() << std::endl;
+    p1 = nullptr;
+    std::cout << "p1  Reference Count = " << p1.use_count() << std::endl;
+    if (!p1)
+    {
+        std::cout << "p1 is NULL" << std::endl;
+    }
+    return 0;
+}
+
+TUPLES :
+
+#include<iostream>
+#include<tuple> 
+using namespace std;
+int main()
+{
+tuple <int,char,float> tup1(20,'g',17.5);
+    tuple <int,char,float> tup2(10,'f',15.5);
+ int i_val;
+    char ch_val;
+    float f_val;   
+      
+     cout << "The size of tuple is : ";
+    cout << tuple_size<decltype(tup1)>::value << endl;
+    cout << "The first tuple elements before swapping are : ";
+    cout <<  get<0>(tup1) << " " << get<1>(tup1) << " "
+         << get<2>(tup1) << endl;
+    cout << "The second tuple elements before swapping are : ";
+    cout <<  get<0>(tup2) << " " << get<1>(tup2) << " " 
+         << get<2>(tup2) << endl;
+      
+    tup1.swap(tup2);
+    cout << "The first tuple elements after swapping are : ";
+    cout <<  get<0>(tup1) << " " << get<1>(tup1) << " " 
+         << get<2>(tup1) << endl;
+    cout << "The second tuple elements after swapping are : ";
+    cout <<  get<0>(tup2) << " " << get<1>(tup2) << " " 
+         << get<2>(tup2) << endl;
+  
+   auto tup3 = tuple_cat(tup1,tup2);
+      
+    cout << "The new tuple elements in order are : ";
+    cout << get<0>(tup3) << " " << get<1>(tup3) << " ";
+    cout << get<2>(tup3) << " " << get<3>(tup3) << " ";
+    cout << get<4>(tup3) << " " << get<5>(tup3) << endl;
+
+tie(i_val,ch_val,f_val) = tup1;
+      
+    cout << "The unpacked tuple values (without ignore) are : ";
+    cout << i_val << " " << ch_val << " " << f_val;
+    cout << endl;
+  
+    return 0;
+}
+
+UNORDERED SET:
+
+#include <iostream>
+#include <unordered_set>
+#include <algorithm>
+int main() {
+    std::unordered_set<std::string> setOfStrs;
+    setOfStrs.insert("First");
+    setOfStrs.insert("second");
+    setOfStrs.insert("third");
+    setOfStrs.insert("second");
+    
+        for (std::string s : setOfStrs)
+        std::cout << s << std::endl;
+}
+
+
+UNORDERED MAP:
+
+#include <iostream>
+#include <unordered_map>
+#include <string>
+using namespace std;
+int main()
+{
+        unordered_map<std::string, int> unMap(
+    {
+    { "First", 1 },
+    { "Second", 2 },
+    { "Third", 3 } });
+        for (std::pair<std::string, int> element : unMap)
+        std::cout << element.first << " :: " << element.second << std::endl;
+    unMap.insert({"four",4});
+     if (unMap.erase("Second") == 1)
+        std::cout << "Element Deleted" << std::endl;
+         for (std::pair<std::string, int> element : unMap)
+        std::cout << element.first << " :: " << element.second << std::endl;
+}
+
+MULTITHREADING:
+
+#include <iostream>
+#include <thread>
+class DisplayThread
+{
+public:
+    void operator()()     
+    {
+        for(int i = 0; i < 2; i++)
+            std::cout<<"Display Thread Executing"<<std::endl;
+    }
+};
+ 
+int main()  
+{
+    std::thread threadObj( (DisplayThread()) );
+
+        std::cout<<"Display From Main Thread "<<std::endl;
+    std::cout<<"Waiting For Thread to complete"<<std::endl;
+    threadObj.join();
+    std::cout<<"Exiting from Main Thread"<<std::endl;
+    return 0;
+}
+
+MUTEX :
+
+#include<iostream>
+#include<thread>
+#include<mutex>
+using namespace std;
+int amount = 0;
+std:: mutex m;
+void add_money() {
+    m.lock();
+    ++amount;
+    m.unlock();
+}
+int main() {
+    std::thread t1(add_money);
+    std::thread t2(add_money);
+    t1.join();
+    t2.join();
+    
+    cout << amount << endl;
+}
+
+TIMED MUTEX:
+
+#include<iostream>
+#include<thread>
+#include<mutex>
+#include<chrono>
+using namespace std;
+int amount = 0;
+timed_mutex m;
+ void increment(int i) {
+     if(m.try_lock_for(std::chrono::seconds(1))) {
+         ++amount;
+         std::this_thread::sleep_for(std::chrono::seconds(2));
+         cout << "thread" << i << "entered" << endl;
+         m.unlock();
+     }
+     else {
+         cout << "thread" << i << "couldnt enter" << endl;
+     }
+ }
+ int main() {
+     std::thread t1(increment,1);
+     std::thread t2(increment,2);
+     
+     t1.join();
+     t2.join();
+     cout << amount << endl;
+ }
+
+CONDITION_VARIABLE :
+
+#include<condition_variable>
+using namespace std;
+condition_variable cv;
+mutex m;
+long amount  = 0;
+void addmoney(int money) {
+lock_guard<mutex> lg(m);
+amount += money;
+cout << "current amount" << amount << endl;
+cv.notify_one();
+}
+void withdraw(int money) {
+    unique_lock<mutex>ul(m);
+    cv.wait(ul,[] {
+        return (amount!=0) ? true :false;
+    });
+    if(amount >= money) {
+        amount -= money;
+        cout <<"current amount" << amount << endl;
+    } else {
+        cout << "amount cant deduct" << endl;
+    }
+}
+int main() {
+    thread t1(withdraw,500);
+    thread t2(addmoney,500);
+    
+    t1.join();
+    t2.join();
+    return 0;
+    
+}
+
+all_of :
+
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main() {
+std::vector<std::string> wordList = { "Hi", "Hello", "Test", "First", "Second", "Third", "Fourth" };
+bool result = all_of(wordList.begin(), wordList.end(), [](const std::string & str) {
+                                                                return str.size() == 4;});
+}
+
+
+

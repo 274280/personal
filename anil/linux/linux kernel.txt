@@ -1,0 +1,194 @@
+LINUX KERNEL :
+
+1.When we power on the system BIOS will load which is present in the flash memory.
+2.It will check bootloader and loads it.
+3.In this bootloader the U-BOOT will initialize all peripherals.
+  eg. CPU ->  CORE  -> CLOCK -> DRAM -> FLASH ->hardware serial ports -> ethernet networking interfaces. etc.
+4.Then this u-boot will load and boot the linux kernel.
+5. we can boot linux kernel manually in U_boot with following commands 
+   tftp 6000000 uimage    loading Uimage into address space 600000 using tftp protocol
+   tftp c000000 dtb       loading board configuration file called device tree binary into address c000000]
+   bootm 6000000 - c000000 - boot of memory will boot the kernel 
+6. then this linux kernel will mount rootfilesytem before loading terminal.
+7. after it execute initialization steps in a context called kernel context.
+
+8. then the first user space process called init will run.
+
+
+
+UNDERSTANDING ABOUT KERNEL SPACE :
+
+1. When an application runs it communicates to kernal through system calls.
+2. when any application executes, calling library functions - some library functions rely on system call interface which instruct kernel to carry out tasks on behalf of application.  
+   This kernal will run in a process context.
+3. Kernal can also manages systems hardware with the concept of interrupts.
+4. whenever any interrupt occurs from any system hardware based upon interrupt number the kernel executes the respected interrupt handler in kernal space.
+5. when it executing any interrupt handler to provide synchronization it disables interrupts
+6. These interrupts will run on special context called interrupt context rather than process context.
+
+
+PROCESS MANAGEMENT:
+1.A process begins its life when, not surprisingly, it is created. In Linux, this occurs by means of the fork() system call, which creates a new process by duplicating an existing 
+  one.The process that calls fork() is the parent, whereas the new process is the child.
+2.The parent resumes execution and the child starts execution at the same place: where the call 
+  to fork() returns.
+3.The fork() system call returns from the kernel twice: once in the parent process and again in the newborn child.
+  Often, immediately after a fork it is desirable to execute a new, different program.
+4.The exec() family of function calls creates a new address space and loads a new program into 
+  it. 
+5.In contemporary Linux kernels, fork() is actually implemented via the clone() system call, which is discussed in a following section.
+6.Finally, a program exits via the exit() system call.This function terminates the process 
+  and frees all its resources.
+7.A parent process can inquire about the status of a terminated child via the wait4()1 system call, which enables a process to wait for the termination of 
+  a specific process.When a process exits, it is placed into a special zombie state that represents terminated processes until the parent calls wait() or waitpid().
+
+8.The kernel stores the list of processes in a circular doubly linked list called the task list.
+  Each element in the task list is a process descriptor of type struct task_struct.The process descriptor contains all the information about a specific process.
+9.The process descriptor contains the data that describes the executing program—open files, the process’s address space, 
+  pending signals, the process’s state, and much more.
+10.The first, fork(), creates a child process that is a copy of the current task. It differs from the parent only in its PID (which is unique), its PPID 
+(parent’s PID, which is set to the original process), and certain resources and statistics, such as pending signals, which are not inherited.
+11.The second function, exec(), loads a new executable into the address space and begins executing it.
+12.The process scheduler decides which process runs, when, and for how long.The process scheduler (or simply the scheduler, to which it is often shortened) divides the finite 
+resource of processor time between the runnable processes on a system.
+13.In preemptive multitasking, the scheduler decides when a process is to cease running and a new process is to begin running.The act of involuntarily suspending a running process is called preemption.
+  The time a process runs before it is preempted is usually predetermined, and it is called the timeslice of the process. 
+  The timeslice, in effect, gives each runnable process a slice of the processor’s time
+
+SYSTEM CALLS:
+1.In any modern operating system, the kernel provides a set of interfaces by which processes running in user-space can interact with the system.These interfaces give applications controlled access to hardware, a mechanism with which to create new processes 
+  and communicate with existing ones, and the capability to request other operating system resources.
+2.An API defines a set of programming interfaces used by applications.Those interfaces can be implemented as a system call, implemented through multiple system calls, or implemented without the use of system calls at 
+   all
+3.call to printf()  ---->  printf() in the C library ----->   write() in the C library ------>   write() system call
+4.The C library implements the main API on Unix systems, including the standard C library and the system call interface.
+5.In Linux, each system call is assigned a syscall number.This is a unique number that is used to reference a specific system call.
+  When a user-space process executes a system call, the syscall number identifies which syscall was executed; the process does not refer to the syscall by name.
+6.On x86, the syscall number is fed to the kernel via the eax register. Before causing the trap into the kernel, user-space sticks in eax the number corresponding to the desired system call.The system call handler then reads the value from
+eax
+
+7.call read() <------> read() wrapper <------> system_call() <---------> sys_read()
+  Application          (C library              (Syscall handler)          (sys_read())
+ 			read wrapper) 
+  ------------User space-----------            --------------kernal space----------------
+
+8.For implementing a system call, for accessing we need to link the prototype to c library and then add the system call n umber in <asm/unistd.h>.
+  To register as an official make an entry  in system call table.
+NOTE: A Semaphore can be described as an object that consists of a counter, a waiting list of processes, Signal and Wait functions.
+Semaphores in Linux are sleeping locks.When a task attempts to acquire a semaphore that is unavailable, the semaphore places the task onto a wait queue and puts the task to 
+sleep.The processor is then free to execute other code.When the semaphore becomes available, one of the tasks on the wait queue is awakened so that it can then acquire the 
+semaphore
+9.            
+
+Interrupts and interrupt handlers:
+1.An interrupt is physically produced by electronic signals originating from hardware devices and directed into input pins on an interrupt controller, 
+  a simple chip that multiplexes multiple interrupt lines into a single line to the processor. 
+2.The function the kernel runs in response to a specific interrupt is called an interrupt handler or interrupt service routine (ISR).
+  Each device that generates interrupts has an associated interrupt handler. For example, one function handles interrupts from the system timer, 
+  whereas another function handles interrupts generated by the keyboard.The interrupt handler for a device is part of the device’s driver—the kernel code that manages the device.  
+3.Drivers have to register one interrupt handler.Drivers can register an interrupt handler and enable a given interrupt line for handling 
+  with the function request_irq(), which is declared in <linux/interrupt.h>: 
+4.Interrupts divided into two parts or halfs named as top halves and bottom halves. The top halves are the interrupts which handled by interrupt handler which are time critical.
+  where as bottom halves are not handled by interrupt handler which run in future.
+5
+
+
+
+
+Memory management:
+1.Memory allocation inside the kernel is not as easy as memory allocation outside the kernel. Simply put, the kernel lacks luxuries enjoyed by user-space. Unlike user-space, the 
+kernel is not always afforded the capability to easily allocate memory. For example, the kernel cannot easily deal with memory allocation errors, and the kernel often cannot sleep.
+Note: MMU is a hardware which manages memory and performs virtual to physical address translations.(It typically deals in pages).
+2.Pages
+3. Zones : Because of hardware limitations, the kernel cannot treat all pages as identical. Some pages, because of their physical address in memory, cannot be used for certain tasks. 
+Because of this limitation, the kernel divides pages into different zones.The kernel uses the zones to group pages of similar properties.
+4.There are zone modifers like gfp_mask flags which specify kernel from where to allocate memory.
+5.SLAB LAYER: For a frequent allocating and de allocating of data structures in a memory it contains free lists which contains block of available already allocated data structures.
+              so whenever code requires a new instance of data structures it takes from free list and whenever it no longer needed it returns back to free list instead of deallocating.so it acts as a cache memory.
+	      but when memory is low It is difficult for kernel to communicate with every free list to free up memory. so the slab layer or slab allocator comes to manage cache memory.
+	      It contains different groups called caches and each cache contain slabs which each slab contains differnt objects.
+
+
+
+
+
+
+
+
+DEVICE DRIVERS:
+1.A driver is one who drives – manages, controls, directs, monitors – the entity under his command.
+2.A device driver has two parts: i) Device-specific, and ii) OS-specific. 
+3.In Os specific system calls will be done where as in Device-specific device calls will be done. see the picture in teams.
+4.The device-specific portion of a device driver remains same across all operating systems, and is more of understanding and decoding of the device data sheets, than of software programming.
+5. However, the OS-specific portion is the one which is tightly coupled with the OS mechanisms of user interfaces.
+   This is the one which differentiates a Linux device driver from a Windows device driver from a MAC device driver.
+6.Based on the OS-specific interface of a driver, in Linux a driver is broadly classified into 3 verticals:
+
+Packet-oriented or Network vertical --- i) network protocol stack     ii) NIC ( network interface card )/ Network drivers
+Block-oriented or Storage vertical  --- i) File system drivers for decoding the various formats  ii)Block device  drivers for various storage protocols like IDE, SCSI, MTD etc
+Byte-oriented or Character vertical --- contains multiple drivers like tty drivers, input drivers, console drivers, framebuffer drivers, sound drivers, etc. typical horizontals like here would be RS232, PS/2, VGA, I2C, I2S, SPI, etc.
+
+DYNAMICALLY LOADING DRIVERS: 
+1.Loading and unloading the drivers on the fly. due to this the driver will be active once loaded and deactive ince unloaded, so no need of reboot the system for activate.
+2.These dynamically loadable drivers are more commonly referred as modules and built into individual files with .ko (kernel object) extension.
+3.Here’s a list of the various (shell) commands relevant to the dynamic operations:
+
+  lsmod : List the currently loaded modules
+  insmod <module_file> : Insert/Load the module specified by <module_file>
+  modprobe <module> – Insert/Load the <module> along with its dependencies
+  rmmod <module> – Remove/Unload the <module>
+4.The drivers will be loaded in similar way to the library , it never runs by itself.It is get loaded/linked to the kernel and hence  it needs to be compiled in similar ways as the kernel.
+  Even the header files to be used can be picked only from the kernel sources, not from the standard /usr/include.
+5.Any Linux driver consists of a constructor and a destructor. The constructor of a module gets called whenever insmod succeeds in loading the module into the kernel. 
+  And the destructor of the module gets called whenever rmmod succeeds in unloading the module out of the kernel. 
+
+
+6./* ofd.c – Our First Driver code */
+
+#include <linux/module.h>
+#include <linux/version.h>
+#include <linux/kernel.h>
+
+static int __init ofd_init(void) /* Constructor */
+{
+    printk(KERN_INFO "Namaskar: ofd registered");
+
+    return 0;
+}
+
+static void __exit ofd_exit(void) /* Destructor */
+{
+    printk(KERN_INFO "Alvida: ofd unregistered");
+}
+
+module_init(ofd_init);
+module_exit(ofd_exit);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Anil Kumar Pugalia <email@sarika-pugs.com>");
+MODULE_DESCRIPTION("Our First Driver");
+
+where module-init, module_exit are the macros calling init and exit functions which are constructors and destructors. there is kernel.h which is similar to stdio.h
+ and version.h which is for version compatibility of module with the kernel into which is to be loaded.Also, the MODULE_* macros populate the module related information, which acts like the module’s signature.
+
+7.Building first driver :
+# Makefile – makefile of our first driver
+
+# if KERNELRELEASE is not defined, we've been called directly from the command line.
+# Invoke the kernel build system.
+ifeq (${KERNELRELEASE},)
+    KERNEL_SOURCE := /usr/src/linux
+    PWD := $(shell pwd)
+default:
+    ${MAKE} -C ${KERNEL_SOURCE} SUBDIRS=${PWD} modules
+
+clean:
+    ${MAKE} -C ${KERNEL_SOURCE} SUBDIRS=${PWD} clean
+
+# Otherwise KERNELRELEASE is defined; we've been invoked from the
+# kernel build system and can use its language.
+else
+    obj-m := ofd.o
+endif
+Note:  1.For building a Linux driver, you need to have the kernel source (or at the least the kernel headers) installed on your system at /usr/src/linux. if not then KERNALSOURCE variable should be changed in bove make file.
+       2.All the printk calls, just put their contents into the (log) ring buffer of the kernel. use dmesg to get kernel messages which running in a background.

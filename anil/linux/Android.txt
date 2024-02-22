@@ -1,0 +1,54 @@
+android architecture or Android software stack is categorized into five parts:
+
+linux kernel
+native libraries (middleware),
+Android Runtime
+Application Framework
+Applications
+
+
+Android Core Building Blocks:
+
+The core building blocks or fundamental components of android are activities, views, intents, services, content providers, fragments and AndroidManifest.xml.
+
+Activity:
+
+An activity is a class that represents a single screen. It is like a Frame in AWT.
+
+View:
+
+A view is the UI element such as button, label, text field etc. Anything that you see is a view.
+
+Intent
+Intent is used to invoke components. It is mainly used to:
+
+Start the service
+Launch an activity
+Display a web page
+Display a list of contacts
+Broadcast a message
+Dial a phone call etc.
+For example, you may write the following code to view the webpage.
+
+Intent intent=new Intent(Intent.ACTION_VIEW);  
+intent.setData(Uri.parse("http://www.javatpoint.com"));  
+startActivity(intent);  
+
+
+Service
+Service is a background process that can run for a long time.
+
+There are two types of services local and remote. Local service is accessed from within the application whereas remote service is accessed remotely from other applications running on the same device.
+
+
+Content Provider
+Content Providers are used to share data between the applications.
+
+Fragment
+Fragments are like parts of activity. An activity can display one or more fragments on the screen at the same time.
+
+AndroidManifest.xml
+It contains informations about activities, content providers, permissions etc. It is like the web.xml file in Java EE.
+
+Android Virtual Device (AVD)
+It is used to test the android application without the need for mobile or tablet etc. It can be created in different configurations to emulate different types of real devices.
